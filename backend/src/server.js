@@ -9,10 +9,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", contactRoute);
 
 app.get("/", (_, res) => {
-  res.send("Server is live!");
+  res.json({ message: "Server is live!" });
 });
 
 app.listen(PORT, () => {
