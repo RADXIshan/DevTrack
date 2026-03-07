@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import { 
   User, Github, Linkedin, Twitter, Edit2, 
-  Save, X, Award, Clock, Activity, Code2 
+  Save, X, Award, Clock, Activity 
 } from 'lucide-react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
