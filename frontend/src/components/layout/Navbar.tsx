@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAppStore } from "../../store/useAppStore";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Sun, Moon, LogOut, Code2, Cpu, GraduationCap, Menu, X } from "lucide-react";
+import { LogOut, Code2, Cpu, GraduationCap, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../lib/utils";
 
@@ -12,7 +12,7 @@ const modes = [
 ];
 
 const Navbar = () => {
-  const { mode, setMode, user, logout, theme, setTheme } = useAppStore();
+  const { mode, setMode, user, logout } = useAppStore();
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -71,14 +71,6 @@ const Navbar = () => {
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-full hover:bg-secondary transition-colors"
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
-
           {user ? (
             <div className="hidden md:flex items-center gap-4">
               <Link to="/profile" className={cn(

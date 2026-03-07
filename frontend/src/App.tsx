@@ -25,13 +25,10 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 const App = () => {
-  const { setUser, theme } = useAppStore();
+  const { setUser } = useAppStore();
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   useEffect(() => {
-    // initialize theme
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    
     // check auth
     const token = localStorage.getItem("token");
     if (token) {
@@ -48,7 +45,7 @@ const App = () => {
     } else {
       setIsCheckingAuth(false);
     }
-  }, [theme, setUser]);
+  }, [setUser]);
 
   if (isCheckingAuth) {
     return null; // Return nothing while validating initial token
