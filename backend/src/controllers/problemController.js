@@ -35,6 +35,12 @@ export const addProblem = async (req, res) => {
       pattern,
       approachThought,
       mode,
+      githubUrl,
+      liveUrl,
+      techStack,
+      paperUrl,
+      modelUsed,
+      framework,
     } = req.body;
 
     if (!title) {
@@ -51,6 +57,12 @@ export const addProblem = async (req, res) => {
         pattern,
         approachThought,
         mode: mode || "DSA",
+        githubUrl,
+        liveUrl,
+        techStack,
+        paperUrl,
+        modelUsed,
+        framework,
         userId: req.user.id,
       },
     });

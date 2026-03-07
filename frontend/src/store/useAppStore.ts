@@ -7,6 +7,14 @@ interface User {
   name: string;
   email: string;
   token: string;
+  bio?: string;
+  githubUrl?: string;
+  linkedinUrl?: string;
+  twitterUrl?: string;
+  createdAt?: string;
+  _count?: {
+    problems: number;
+  };
 }
 
 interface AppState {

@@ -77,7 +77,14 @@ export const getMe = async (req, res) => {
         id: true,
         name: true,
         email: true,
+        bio: true,
+        githubUrl: true,
+        linkedinUrl: true,
+        twitterUrl: true,
         createdAt: true,
+        _count: {
+          select: { problems: true }
+        }
       },
     });
 

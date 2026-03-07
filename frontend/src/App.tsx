@@ -1,9 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import AppLayout from "./components/layout/AppLayout.tsx";
-import Dashboard from "./pages/Dashboard.tsx";
-import Login from "./pages/Login.tsx";
-import Signup from "./pages/Signup.tsx";
+import AppLayout from "./components/layout/AppLayout";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 import { useAppStore } from "./store/useAppStore";
 import axios from "axios";
 
@@ -67,6 +68,7 @@ const App = () => {
         }
       >
         <Route index element={<Dashboard />} />
+        <Route path="profile" element={<Profile />} />
         {/* Other routes will be added here */}
       </Route>
     </Routes>

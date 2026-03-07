@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "../../store/useAppStore";
@@ -8,9 +8,10 @@ interface ProblemModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAdd: () => void;
+  initialData?: any;
 }
 
-export default function ProblemModal({ isOpen, onClose, onAdd }: ProblemModalProps) {
+export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: ProblemModalProps) {
   const { mode, user } = useAppStore();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -21,27 +22,66 @@ export default function ProblemModal({ isOpen, onClose, onAdd }: ProblemModalPro
     algorithm: "",
     pattern: "",
     approachThought: "",
+    // DEV fields
+    githubUrl: "",
+    liveUrl: "",
+    techStack: "",
+    // AI fields
+    paperUrl: "",
+    modelUsed: "",
+    framework: "",
   });
+
+  useEffect(() => {
+    if (initialData && isOpen) {
+      setFormData({
+        title: initialData.title || "",
+        leetcodeUrl: initialData.leetcodeUrl || "",
+        difficulty: initialData.difficulty || "Easy",
+        dataStructure: initialData.dataStructure || "",
+        algorithm: initialData.algorithm || "",
+        pattern: initialData.pattern || "",
+        approachThought: initialData.approachThought || "",
+        githubUrl: initialData.githubUrl || "",
+        liveUrl: initialData.liveUrl || "",
+        techStack: initialData.techStack || "",
+        paperUrl: initialData.paperUrl || "",
+        modelUsed: initialData.modelUsed || "",
+        framework: initialData.framework || "",
+      });
+    } else if (isOpen) {
+      setFormData({
+        title: "", leetcodeUrl: "", difficulty: "Easy", dataStructure: "",
+        algorithm: "", pattern: "", approachThought: "",
+        githubUrl: "", liveUrl: "", techStack: "",
+        paperUrl: "", modelUsed: "", framework: ""
+      });
+    }
+  }, [initialData, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(
-        "http://localhost:3000/api/problems",
-        { ...formData, mode },
-        { headers: { Authorization: `Bearer ${user?.token}` } }
-      );
+      if (initialData) {
+        await axios.put(
+          `http://localhost:3000/api/problems/${initialData.id}`,
+          { ...formData, mode },
+          { headers: { Authorization: `Bearer ${user?.token}` } }
+        );
+      } else {
+        await axios.post(
+          "http://localhost:3000/api/problems",
+          { ...formData, mode },
+          { headers: { Authorization: `Bearer ${user?.token}` } }
+        );
+      }
+      onAdd();
       onAdd();
       onClose();
-      // Reset form
-      setFormData({
-        title: "", leetcodeUrl: "", difficulty: "Easy", dataStructure: "",
-        algorithm: "", pattern: "", approachThought: ""
-      });
     } catch (error) {
       console.error(error);
-      alert("Failed to create problem");
+      alert(initialData ? "Failed to update problem" : "Failed to create problem");
     } finally {
       setLoading(false);
     }
@@ -58,7 +98,7 @@ export default function ProblemModal({ isOpen, onClose, onAdd }: ProblemModalPro
             className="w-full max-w-lg bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
           >
             <div className="flex items-center justify-between p-6 border-b border-border bg-muted/30">
-              <h2 className="text-xl font-semibold">Log New {mode} Problem</h2>
+              <h2 className="text-xl font-semibold">{initialData ? "Edit" : "Log New"} {mode} Problem</h2>
               <button onClick={onClose} className="p-2 rounded-full hover:bg-secondary transition-colors">
                 <X className="w-5 h-5" />
               </button>
@@ -105,16 +145,92 @@ export default function ProblemModal({ isOpen, onClose, onAdd }: ProblemModalPro
                   </div>
                 )}
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Link / URL</label>
-                  <input
-                    type="url"
-                    value={formData.leetcodeUrl}
-                    onChange={(e) => setFormData({...formData, leetcodeUrl: e.target.value})}
-                    className="w-full px-3 py-2 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    placeholder="https://..."
-                  />
-                </div>
+                {mode === "DSA" && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">LeetCode Link / URL</label>
+                    <input
+                      type="url"
+                      value={formData.leetcodeUrl}
+                      onChange={(e) => setFormData({...formData, leetcodeUrl: e.target.value})}
+                      className="w-full px-3 py-2 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      placeholder="https://..."
+                    />
+                  </div>
+                )}
+                
+                {mode === "DEV" && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Tech Stack</label>
+                        <input
+                          type="text"
+                          value={formData.techStack}
+                          onChange={(e) => setFormData({...formData, techStack: e.target.value})}
+                          className="w-full px-3 py-2 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="e.g. Next.js, Node"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Live URL</label>
+                        <input
+                          type="url"
+                          value={formData.liveUrl}
+                          onChange={(e) => setFormData({...formData, liveUrl: e.target.value})}
+                          className="w-full px-3 py-2 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="https://..."
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">GitHub Repository</label>
+                      <input
+                        type="url"
+                        value={formData.githubUrl}
+                        onChange={(e) => setFormData({...formData, githubUrl: e.target.value})}
+                        className="w-full px-3 py-2 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        placeholder="https://github.com/..."
+                      />
+                    </div>
+                  </>
+                )}
+
+                {mode === "AI" && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Framework</label>
+                        <input
+                          type="text"
+                          value={formData.framework}
+                          onChange={(e) => setFormData({...formData, framework: e.target.value})}
+                          className="w-full px-3 py-2 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="e.g. PyTorch, TensorFlow"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Model Used</label>
+                        <input
+                          type="text"
+                          value={formData.modelUsed}
+                          onChange={(e) => setFormData({...formData, modelUsed: e.target.value})}
+                          className="w-full px-3 py-2 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="e.g. Llama-3, GPT-4"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Paper/Resource URL</label>
+                      <input
+                        type="url"
+                        value={formData.paperUrl}
+                        onChange={(e) => setFormData({...formData, paperUrl: e.target.value})}
+                        className="w-full px-3 py-2 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        placeholder="https://arxiv.org/..."
+                      />
+                    </div>
+                  </>
+                )}
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Notes & Approach</label>
@@ -143,7 +259,7 @@ export default function ProblemModal({ isOpen, onClose, onAdd }: ProblemModalPro
                 disabled={loading}
                 className="px-6 py-2 rounded-lg font-medium bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50 transition-opacity"
               >
-                {loading ? "Saving..." : "Save Problem"}
+                {loading ? "Saving..." : initialData ? "Update Problem" : "Save Problem"}
               </button>
             </div>
           </motion.div>

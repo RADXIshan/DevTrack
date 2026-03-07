@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAppStore } from "../../store/useAppStore";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Sun, Moon, LogOut, Code2, Cpu, GraduationCap, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../lib/utils";
@@ -14,7 +14,10 @@ const modes = [
 const Navbar = () => {
   const { mode, setMode, user, logout, theme, setTheme } = useAppStore();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+
+  const isProfile = location.pathname === "/profile";
 
   const handleLogout = () => {
     logout();
@@ -38,12 +41,15 @@ const Navbar = () => {
         {/* Desktop Mode Toggle */}
         <div className="hidden md:flex items-center p-1 bg-secondary rounded-xl border border-border shadow-sm">
           {modes.map((m) => {
-            const isActive = mode === m.id;
+            const isActive = mode === m.id && !isProfile;
             const Icon = m.icon;
             return (
               <button
                 key={m.id}
-                onClick={() => setMode(m.id as any)}
+                onClick={() => {
+                  setMode(m.id as any);
+                  if (isProfile) navigate("/");
+                }}
                 className={cn(
                   "relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors z-10",
                   isActive ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-background/50"
@@ -75,7 +81,12 @@ const Navbar = () => {
 
           {user ? (
             <div className="hidden md:flex items-center gap-4">
-              <span className="text-sm font-medium text-muted-foreground">Hey, {user.name.split(" ")[0]}</span>
+              <Link to="/profile" className={cn(
+                "text-sm font-medium transition-colors",
+                isProfile ? "text-primary font-semibold" : "text-muted-foreground hover:text-foreground"
+              )}>
+                Hey, {user.name.split(" ")[0]}
+              </Link>
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
@@ -109,11 +120,15 @@ const Navbar = () => {
             <div className="px-4 py-4 space-y-4">
               <div className="flex justify-between items-center p-1 bg-secondary rounded-xl border border-border shadow-sm">
                 {modes.map((m) => {
-                  const isActive = mode === m.id;
+                  const isActive = mode === m.id && !isProfile;
                   return (
                     <button
                       key={m.id}
-                      onClick={() => { setMode(m.id as any); setIsOpen(false); }}
+                      onClick={() => { 
+                        setMode(m.id as any); 
+                        setIsOpen(false); 
+                        if (isProfile) navigate("/");
+                      }}
                       className={cn(
                         "relative flex flex-1 justify-center items-center py-2 text-sm font-medium rounded-lg z-10",
                         isActive ? "text-primary-foreground bg-primary" : "text-muted-foreground"

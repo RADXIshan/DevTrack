@@ -12,6 +12,10 @@ model User {
   name         String
   email        String            @unique
   passwordHash String
+  bio          String?
+  githubUrl    String?
+  linkedinUrl  String?
+  twitterUrl   String?
   createdAt    DateTime          @default(now())
   problems     ProblemEntry[]
   sheets       PredefinedSheetProgress[]
@@ -27,6 +31,17 @@ model ProblemEntry {
   pattern        String?
   approachThought String?  @db.Text
   mode           String    @default("DSA") // "DSA", "DEV", "AI"
+  
+  // --- DEV Mode Fields ---
+  githubUrl      String?
+  liveUrl        String?
+  techStack      String?
+  
+  // --- AI Mode Fields ---
+  paperUrl       String?
+  modelUsed      String?
+  framework      String?
+  
   completedAt    DateTime  @default(now())
   
   userId         String

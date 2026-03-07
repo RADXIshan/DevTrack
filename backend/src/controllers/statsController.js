@@ -18,6 +18,8 @@ export const getStats = async (req, res) => {
     const difficultyCounts = { Easy: 0, Medium: 0, Hard: 0 };
     const patternCounts = {};
     const dsCounts = {};
+    const techStackCounts = {};
+    const frameworkCounts = {};
 
     problems.forEach((p) => {
       if (p.difficulty) {
@@ -29,6 +31,12 @@ export const getStats = async (req, res) => {
       if (p.dataStructure) {
         dsCounts[p.dataStructure] = (dsCounts[p.dataStructure] || 0) + 1;
       }
+      if (p.techStack) {
+        techStackCounts[p.techStack] = (techStackCounts[p.techStack] || 0) + 1;
+      }
+      if (p.framework) {
+        frameworkCounts[p.framework] = (frameworkCounts[p.framework] || 0) + 1;
+      }
     });
 
     res.json({
@@ -36,6 +44,8 @@ export const getStats = async (req, res) => {
       difficultyCounts,
       patternCounts,
       dsCounts,
+      techStackCounts,
+      frameworkCounts,
     });
   } catch (error) {
     console.error(error);
