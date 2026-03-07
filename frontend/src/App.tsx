@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AppLayout from "./components/layout/AppLayout.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Login from "./pages/Login.tsx";
@@ -15,8 +15,17 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return children;
 };
 
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAppStore();
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+};
+
 const App = () => {
   const { setUser, theme } = useAppStore();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   useEffect(() => {
     // initialize theme
@@ -32,14 +41,22 @@ const App = () => {
       }).catch(() => {
         localStorage.removeItem("token");
         setUser(null);
+      }).finally(() => {
+        setIsCheckingAuth(false);
       });
+    } else {
+      setIsCheckingAuth(false);
     }
   }, [theme, setUser]);
 
+  if (isCheckingAuth) {
+    return null; // Return nothing while validating initial token
+  }
+
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+      <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
       
       <Route
         path="/"
