@@ -34,7 +34,7 @@ const Navbar = () => {
             <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
               <Code2 className="h-5 w-5" />
             </div>
-            <span className="font-bold text-xl tracking-tight hidden sm:inline-block">AlgoTrack</span>
+            <span className="font-bold text-xl tracking-tight hidden sm:inline-block">DevTrack</span>
           </Link>
         </div>
 

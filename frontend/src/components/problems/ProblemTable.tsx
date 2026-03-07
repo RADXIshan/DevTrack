@@ -110,29 +110,38 @@ export default function ProblemTable({ problems, onRefresh, onEdit }: { problems
 
     <AnimatePresence>
       {problemToDelete && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-linear-to-br from-indigo-500/30 via-purple-500/20 to-pink-500/30 dark:from-indigo-950/60 dark:via-purple-950/50 dark:to-pink-950/60 backdrop-blur-xl">
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6 bg-zinc-950/60 backdrop-blur-sm">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="w-full max-w-md bg-card border border-border rounded-2xl shadow-2xl p-6"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="w-full max-w-md bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-6 sm:p-8 overflow-hidden relative"
           >
-            <h3 className="text-xl font-semibold mb-2">Delete Problem?</h3>
-            <p className="text-muted-foreground mb-6">
-              Are you sure you want to permanently delete this problem? This action cannot be undone.
+            <div className="absolute top-0 left-0 w-full h-1 bg-zinc-900 dark:bg-zinc-100" />
+            
+            <div className="flex items-center gap-4 mb-5">
+              <div className="w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
+                <Trash2 className="w-6 h-6 text-zinc-900 dark:text-zinc-100" />
+              </div>
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white">Delete Log?</h3>
+            </div>
+            
+            <p className="text-zinc-600 dark:text-zinc-400 mb-8 ml-0 sm:ml-16 leading-relaxed">
+              Are you sure you want to permanently delete this log? This action cannot be undone.
             </p>
-            <div className="flex justify-end gap-3">
+            
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:ml-16">
               <button 
                 onClick={() => setProblemToDelete(null)}
-                className="px-4 py-2 rounded-lg font-medium text-muted-foreground hover:bg-secondary transition-colors"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-semibold text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors shadow-sm"
               >
                 Cancel
               </button>
               <button 
                 onClick={handleDeleteConfirm}
-                className="px-4 py-2 bg-destructive text-destructive-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-semibold bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all shadow-sm shadow-zinc-500/20 hover:scale-[1.02] active:scale-[0.98]"
               >
-                Delete
+                Delete Log
               </button>
             </div>
           </motion.div>
