@@ -30,11 +30,11 @@ const Navbar = () => {
         
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <Link to="/" className="flex items-center gap-2 transition-transform hover:scale-105 active:scale-95">
+          <Link to="/dashboard" className="flex items-center gap-2 transition-transform hover:scale-105 active:scale-95">
             <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
               <Code2 className="h-5 w-5" />
             </div>
-            <span className="font-bold text-xl tracking-tight hidden sm:inline-block">DevTrack</span>
+            <span className="font-bold text-xl tracking-tight hidden sm:inline-block">CodeTracker</span>
           </Link>
         </div>
 
@@ -48,7 +48,7 @@ const Navbar = () => {
                 key={m.id}
                 onClick={() => {
                   setMode(m.id as any);
-                  if (isProfile) navigate("/");
+                  if (isProfile) navigate("/dashboard");
                 }}
                 className={cn(
                   "relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors z-10",
@@ -119,7 +119,7 @@ const Navbar = () => {
                       onClick={() => { 
                         setMode(m.id as any); 
                         setIsOpen(false); 
-                        if (isProfile) navigate("/");
+                        if (isProfile) navigate("/dashboard");
                       }}
                       className={cn(
                         "relative flex flex-1 justify-center items-center py-2 text-sm font-medium rounded-lg z-10",

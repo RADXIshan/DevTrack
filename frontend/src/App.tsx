@@ -5,6 +5,8 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import Landing from "./pages/Landing";
+import NotFound from "./pages/NotFound";
 import { useAppStore } from "./store/useAppStore";
 import axios from "axios";
 
@@ -19,7 +21,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppStore();
   if (user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
   return children;
 };
@@ -53,11 +55,12 @@ const App = () => {
 
   return (
     <Routes>
+      <Route path="/" element={<Landing />} />
       <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
       <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
       
       <Route
-        path="/"
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <AppLayout />
@@ -66,8 +69,10 @@ const App = () => {
       >
         <Route index element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
-        {/* Other routes will be added here */}
       </Route>
+
+      {/* Redirect for legacy or common paths if needed */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
