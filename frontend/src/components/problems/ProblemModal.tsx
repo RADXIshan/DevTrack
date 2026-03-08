@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Save, Edit3, Code2, LayoutDashboard, BrainCircuit } from "lucide-react";
+import { X, Save, Edit3, Code2, LayoutDashboard, BrainCircuit, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "../../store/useAppStore";
 import axios from "axios";
@@ -59,6 +59,17 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
     }
   }, [initialData, isOpen]);
 
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen && !loading) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isOpen, loading, onClose]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -92,12 +103,20 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6 bg-zinc-950/60 backdrop-blur-sm">
+        <div 
+          className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6 bg-zinc-950/60 backdrop-blur-sm"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !loading) {
+              onClose();
+            }
+          }}
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="w-full max-w-xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] relative"
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Top accent line */}
             <div className="absolute top-0 left-0 w-full h-1 bg-zinc-900 dark:bg-zinc-100" />
@@ -122,7 +141,9 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
             <div className="p-6 overflow-y-auto custom-scrollbar bg-white dark:bg-zinc-950">
               <form id="problem-form" onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Title *</label>
+                  <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                    Title <span className="text-red-500">*</span>
+                  </label>
                   <input
                     type="text"
                     required
@@ -137,15 +158,18 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
                   <div className="grid grid-cols-2 gap-5">
                     <div className="space-y-1.5">
                       <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Difficulty</label>
-                      <select 
-                        value={formData.difficulty}
-                        onChange={(e) => setFormData({...formData, difficulty: e.target.value})}
-                        className="w-full px-4 py-3 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 dark:focus:ring-indigo-500/50 text-zinc-900 dark:text-white transition-all shadow-sm appearance-none"
-                      >
-                        <option>Easy</option>
-                        <option>Medium</option>
-                        <option>Hard</option>
-                      </select>
+                      <div className="relative">
+                        <select 
+                          value={formData.difficulty}
+                          onChange={(e) => setFormData({...formData, difficulty: e.target.value})}
+                          className="w-full px-4 py-3 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 dark:focus:ring-indigo-500/50 text-zinc-900 dark:text-white transition-all shadow-sm appearance-none pr-10"
+                        >
+                          <option>Easy</option>
+                          <option>Medium</option>
+                          <option>Hard</option>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 dark:text-zinc-400 pointer-events-none" />
+                      </div>
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Pattern</label>
@@ -274,8 +298,17 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
                 disabled={loading}
                 className="px-6 py-2.5 rounded-xl font-semibold bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-sm flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none hover:bg-zinc-800 dark:hover:bg-zinc-200 shadow-zinc-500/20"
               >
-                {initialData ? <Edit3 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-                {loading ? "Saving..." : initialData ? "Save Changes" : "Log Problem"}
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    {initialData ? <Edit3 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+                    {initialData ? "Save Changes" : "Log Problem"}
+                  </>
+                )}
               </button>
             </div>
           </motion.div>
