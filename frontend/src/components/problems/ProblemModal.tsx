@@ -142,7 +142,7 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
               <form id="problem-form" onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-1.5">
                   <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                    Title <span className="text-red-500">*</span>
+                    Title
                   </label>
                   <input
                     type="text"
