@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { API_BASE_URL } from '../config/api';
 
 const Profile = () => {
   const { user, setUser } = useAppStore();
@@ -32,7 +33,7 @@ const Profile = () => {
   const handleSave = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.put('http://localhost:3000/api/users/profile', formData, {
+      const res = await axios.put(`${API_BASE_URL}/api/users/profile`, formData, {
         headers: { Authorization: `Bearer ${user?.token}` }
       });
       setUser({ ...user!, ...res.data });

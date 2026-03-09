@@ -5,6 +5,7 @@ import { Activity, Code, Database, Brain, Plus } from "lucide-react";
 import axios from "axios";
 import ProblemTable from "../components/problems/ProblemTable";
 import ProblemModal from "../components/problems/ProblemModal";
+import { API_BASE_URL } from "../config/api";
 
 export default function Dashboard() {
   const { mode, user } = useAppStore();
@@ -17,10 +18,10 @@ export default function Dashboard() {
     if (!user) return;
     try {
       const [probRes, statRes] = await Promise.all([
-        axios.get(`http://localhost:3000/api/problems?mode=${mode}`, {
+        axios.get(`${API_BASE_URL}/api/problems?mode=${mode}`, {
           headers: { Authorization: `Bearer ${user.token}` }
         }),
-        axios.get(`http://localhost:3000/api/stats?mode=${mode}`, {
+        axios.get(`${API_BASE_URL}/api/stats?mode=${mode}`, {
           headers: { Authorization: `Bearer ${user.token}` }
         })
       ]);

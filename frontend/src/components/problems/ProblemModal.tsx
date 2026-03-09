@@ -3,6 +3,7 @@ import { X, Save, Edit3, Code2, LayoutDashboard, BrainCircuit, ChevronDown } fro
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "../../store/useAppStore";
 import axios from "axios";
+import { API_BASE_URL } from "../../config/api";
 
 interface ProblemModalProps {
   isOpen: boolean;
@@ -76,13 +77,13 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
     try {
       if (initialData) {
         await axios.put(
-          `http://localhost:3000/api/problems/${initialData.id}`,
+          `${API_BASE_URL}/api/problems/${initialData.id}`,
           { ...formData, mode },
           { headers: { Authorization: `Bearer ${user?.token}` } }
         );
       } else {
         await axios.post(
-          "http://localhost:3000/api/problems",
+          `${API_BASE_URL}/api/problems`,
           { ...formData, mode },
           { headers: { Authorization: `Bearer ${user?.token}` } }
         );

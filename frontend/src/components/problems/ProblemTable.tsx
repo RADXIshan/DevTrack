@@ -4,6 +4,7 @@ import axios from "axios";
 import { useAppStore } from "../../store/useAppStore";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_BASE_URL } from "../../config/api";
 
 export default function ProblemTable({ problems, onRefresh, onEdit }: { problems: any[], onRefresh: () => void, onEdit?: (problem: any) => void }) {
   const { user, mode } = useAppStore();
@@ -12,7 +13,7 @@ export default function ProblemTable({ problems, onRefresh, onEdit }: { problems
   const handleDeleteConfirm = async () => {
     if (!problemToDelete) return;
     try {
-      await axios.delete(`http://localhost:3000/api/problems/${problemToDelete}`, {
+      await axios.delete(`${API_BASE_URL}/api/problems/${problemToDelete}`, {
         headers: { Authorization: `Bearer ${user?.token}` }
       });
       setProblemToDelete(null);
