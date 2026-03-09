@@ -26,17 +26,19 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background border-b border-border">
+    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md border-b border-border shadow-lg">
       <div className="container flex h-14 max-w-7xl mx-auto items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Logo */}
         <div className="flex items-center gap-6">
-          <Link to="/dashboard" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-            <img src="/logo.png" alt="DevTracker" className="w-8 h-8" />
-            <div className="text-primary font-bold text-xl">
-              DevTracker
-            </div>
-          </Link>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link to="/dashboard" className="flex items-center gap-2 transition-opacity hover:opacity-80">
+              <img src="/logo.png" alt="DevTracker" className="w-8 h-8" />
+              <div className="text-primary font-bold text-xl">
+                DevTracker
+              </div>
+            </Link>
+          </motion.div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
@@ -72,16 +74,18 @@ const Navbar = () => {
 
           {/* User Menu */}
           <div className="relative">
-            <button
+            <motion.button
               onClick={() => setShowUserMenu(!showUserMenu)}
               className="flex items-center gap-2 p-2 rounded-md hover:bg-muted/50 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
                 <span className="text-sm font-medium text-primary">
                   {user?.name?.charAt(0).toUpperCase()}
                 </span>
               </div>
-            </button>
+            </motion.button>
 
             <AnimatePresence>
               {showUserMenu && (
@@ -89,7 +93,8 @@ const Navbar = () => {
                   initial={{ opacity: 0, scale: 0.95, y: -10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                  className="absolute right-0 mt-2 w-48 bg-background border border-border rounded-md shadow-lg py-1 z-50"
+                  transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                  className="absolute right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-2xl py-1 z-50"
                 >
                   <div className="px-3 py-2 border-b border-border">
                     <p className="text-sm font-medium">{user?.name}</p>

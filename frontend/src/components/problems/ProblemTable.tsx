@@ -35,13 +35,23 @@ export default function ProblemTable({ problems, onRefresh, onEdit }: { problems
 
   if (!problems.length) {
     return (
-      <div className="p-8 text-center">
-        <div className="text-muted-foreground mb-4">
+      <motion.div 
+        className="p-8 text-center"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div 
+          className="text-muted-foreground mb-4"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+        >
           <CheckCircle2 className="w-12 h-12 mx-auto mb-3 opacity-50" />
-        </div>
+        </motion.div>
         <h3 className="text-lg font-medium mb-2">No {mode.toLowerCase()} entries yet</h3>
         <p className="text-muted-foreground">Start tracking your progress by adding your first entry.</p>
-      </div>
+      </motion.div>
     );
   }
 
@@ -63,10 +73,23 @@ export default function ProblemTable({ problems, onRefresh, onEdit }: { problems
           </thead>
           <tbody>
             {problems.map((problem, index) => (
-              <tr key={problem.id} className="leetcode-hover">
+              <motion.tr 
+                key={problem.id} 
+                className="leetcode-hover"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.03)" }}
+              >
                 <td>
                   <div className="flex items-center justify-center">
-                    <CheckCircle2 className="w-4 h-4 text-green-400" />
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: index * 0.05 + 0.2, type: "spring" }}
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-green-400" />
+                    </motion.div>
                   </div>
                 </td>
                 <td>
@@ -133,36 +156,42 @@ export default function ProblemTable({ problems, onRefresh, onEdit }: { problems
                   <div className="flex items-center gap-2">
                     {/* External Link */}
                     {(problem.leetcodeUrl || problem.githubUrl || problem.paperUrl) && (
-                      <a
+                      <motion.a
                         href={problem.leetcodeUrl || problem.githubUrl || problem.paperUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-1 rounded hover:bg-muted/50 transition-colors"
+                        whileHover={{ scale: 1.2 }}
+                        whileTap={{ scale: 0.9 }}
                       >
                         <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-foreground" />
-                      </a>
+                      </motion.a>
                     )}
                     
                     {/* Edit */}
                     {onEdit && (
-                      <button
+                      <motion.button
                         onClick={() => onEdit(problem)}
                         className="p-1 rounded hover:bg-muted/50 transition-colors"
+                        whileHover={{ scale: 1.2 }}
+                        whileTap={{ scale: 0.9 }}
                       >
                         <Edit className="w-4 h-4 text-muted-foreground hover:text-foreground" />
-                      </button>
+                      </motion.button>
                     )}
                     
                     {/* Delete */}
-                    <button
+                    <motion.button
                       onClick={() => setProblemToDelete(problem.id)}
                       className="p-1 rounded hover:bg-muted/50 transition-colors"
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
                     >
                       <Trash2 className="w-4 h-4 text-muted-foreground hover:text-red-400" />
-                    </button>
+                    </motion.button>
                   </div>
                 </td>
-              </tr>
+              </motion.tr>
             ))}
           </tbody>
         </table>
@@ -171,33 +200,43 @@ export default function ProblemTable({ problems, onRefresh, onEdit }: { problems
       {/* Delete Confirmation Modal */}
       <AnimatePresence>
         {problemToDelete && (
-          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          <motion.div 
+            className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-background border border-border rounded-lg p-6 max-w-md w-full mx-4"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="bg-background border border-border rounded-lg p-6 max-w-md w-full mx-4 shadow-2xl"
             >
               <h3 className="text-lg font-semibold mb-2">Delete Entry</h3>
               <p className="text-muted-foreground mb-6">
                 Are you sure you want to delete this entry? This action cannot be undone.
               </p>
               <div className="flex gap-3 justify-end">
-                <button
+                <motion.button
                   onClick={() => setProblemToDelete(null)}
                   className="btn-leetcode-outline"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Cancel
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   onClick={handleDeleteConfirm}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md font-medium transition-colors"
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Delete
-                </button>
+                </motion.button>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

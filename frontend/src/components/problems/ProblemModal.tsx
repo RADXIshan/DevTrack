@@ -111,23 +111,31 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+        <motion.div 
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.9, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="bg-background border border-border rounded-lg w-full max-w-2xl max-h-[90vh] overflow-hidden"
+            exit={{ opacity: 0, scale: 0.9, y: 30 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="bg-background border border-border rounded-lg w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-border">
               <h2 className="text-xl font-semibold text-foreground">{getModalTitle()}</h2>
-              <button
+              <motion.button
                 onClick={onClose}
                 disabled={loading}
                 className="p-2 rounded-md hover:bg-muted/50 transition-colors disabled:opacity-50"
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <X className="w-5 h-5" />
-              </button>
+              </motion.button>
             </div>
 
             {/* Form */}
@@ -315,19 +323,23 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
 
             {/* Footer */}
             <div className="flex items-center justify-end gap-3 p-6 border-t border-border">
-              <button
+              <motion.button
                 type="button"
                 onClick={onClose}
                 disabled={loading}
                 className="btn-leetcode-outline disabled:opacity-50"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 Cancel
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 type="submit"
                 onClick={handleSubmit}
                 disabled={loading}
                 className="btn-leetcode disabled:opacity-50 flex items-center gap-2"
+                whileHover={{ scale: loading ? 1 : 1.05 }}
+                whileTap={{ scale: loading ? 1 : 0.95 }}
               >
                 {loading ? (
                   <>
@@ -340,10 +352,10 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
                     {initialData ? "Update" : "Save"}
                   </>
                 )}
-              </button>
+              </motion.button>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import { 
-  Github, Linkedin, Twitter, Edit2, 
-  Save, X, Award, Activity 
+  Edit2, Save, X, Award, Activity 
 } from 'lucide-react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config/api';
+import { motion } from 'framer-motion';
 
 const Profile = () => {
   const { user, setUser } = useAppStore();
@@ -70,22 +70,36 @@ const Profile = () => {
     <div className="min-h-screen bg-background">
       <div className="container max-w-6xl mx-auto px-4 py-6">
         {/* Header */}
-        <div className="mb-8">
+        <motion.div 
+          className="mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <h1 className="text-2xl font-bold text-foreground mb-1">Profile</h1>
           <p className="text-muted-foreground">Manage your account settings and preferences</p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Profile Card */}
-          <div className="lg:col-span-2">
+          <motion.div 
+            className="lg:col-span-2"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             <div className="leetcode-card rounded-lg p-6">
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
+                  <motion.div 
+                    className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center"
+                    whileHover={{ scale: 1.1, rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                  >
                     <span className="text-2xl font-bold text-primary">
                       {user.name?.charAt(0).toUpperCase()}
                     </span>
-                  </div>
+                  </motion.div>
                   <div>
                     <h2 className="text-xl font-semibold text-foreground">{user.name}</h2>
                     <p className="text-muted-foreground">{user.email}</p>
@@ -97,19 +111,23 @@ const Profile = () => {
                 
                 <div className="flex items-center gap-2">
                   {isEditing && (
-                    <button
+                    <motion.button
                       onClick={handleCancel}
                       disabled={isLoading}
                       className="btn-leetcode-outline"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       <X className="w-4 h-4" />
                       Cancel
-                    </button>
+                    </motion.button>
                   )}
-                  <button
+                  <motion.button
                     onClick={() => isEditing ? handleSave() : setIsEditing(true)}
                     disabled={isLoading}
                     className="btn-leetcode flex items-center gap-2"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     {isEditing ? (
                       <>
@@ -122,7 +140,7 @@ const Profile = () => {
                         Edit
                       </>
                     )}
-                  </button>
+                  </motion.button>
                 </div>
               </div>
 
@@ -136,7 +154,7 @@ const Profile = () => {
                     onChange={handleChange}
                     placeholder="Tell us about yourself..."
                     rows={4}
-                    className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                    className="w-full px-3 py-2 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all"
                   />
                 ) : (
                   <p className="text-muted-foreground">
@@ -150,14 +168,14 @@ const Profile = () => {
                 <h3 className="text-lg font-medium text-foreground mb-3">Social Links</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <Github className="w-5 h-5 text-muted-foreground" />
+                    <span className="text-muted-foreground text-sm w-20">GitHub:</span>
                     {isEditing ? (
                       <input
                         name="githubUrl"
                         value={formData.githubUrl}
                         onChange={handleChange}
                         placeholder="https://github.com/username"
-                        className="flex-1 px-3 py-2 bg-input border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="flex-1 px-3 py-2 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       />
                     ) : (
                       <span className="text-muted-foreground">
@@ -173,14 +191,14 @@ const Profile = () => {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <Linkedin className="w-5 h-5 text-muted-foreground" />
+                    <span className="text-muted-foreground text-sm w-20">LinkedIn:</span>
                     {isEditing ? (
                       <input
                         name="linkedinUrl"
                         value={formData.linkedinUrl}
                         onChange={handleChange}
                         placeholder="https://linkedin.com/in/username"
-                        className="flex-1 px-3 py-2 bg-input border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="flex-1 px-3 py-2 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       />
                     ) : (
                       <span className="text-muted-foreground">
@@ -196,14 +214,14 @@ const Profile = () => {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <Twitter className="w-5 h-5 text-muted-foreground" />
+                    <span className="text-muted-foreground text-sm w-20">Twitter:</span>
                     {isEditing ? (
                       <input
                         name="twitterUrl"
                         value={formData.twitterUrl}
                         onChange={handleChange}
                         placeholder="https://twitter.com/username"
-                        className="flex-1 px-3 py-2 bg-input border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="flex-1 px-3 py-2 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       />
                     ) : (
                       <span className="text-muted-foreground">
@@ -220,11 +238,17 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Stats Sidebar */}
           <div className="space-y-4">
-            <div className="leetcode-card rounded-lg p-4">
+            <motion.div 
+              className="leetcode-card rounded-lg p-4"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              whileHover={{ y: -4 }}
+            >
               <div className="flex items-center gap-3 mb-3">
                 <Award className="w-5 h-5 text-primary" />
                 <h3 className="font-medium text-foreground">Statistics</h3>
@@ -241,9 +265,15 @@ const Profile = () => {
                   <div className="text-sm text-muted-foreground">Level</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="leetcode-card rounded-lg p-4">
+            <motion.div 
+              className="leetcode-card rounded-lg p-4"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              whileHover={{ y: -4 }}
+            >
               <div className="flex items-center gap-3 mb-3">
                 <Activity className="w-5 h-5 text-blue-400" />
                 <h3 className="font-medium text-foreground">Activity</h3>
@@ -251,7 +281,7 @@ const Profile = () => {
               <div className="text-sm text-muted-foreground">
                 Keep tracking your progress to see activity insights here.
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

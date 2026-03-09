@@ -8,9 +8,6 @@ import {
   Target,
   Zap,
   BarChart3,
-  Github,
-  Twitter,
-  Linkedin,
   Play
 } from "lucide-react";
 
@@ -63,15 +60,24 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="border-b border-border bg-background/95 backdrop-blur">
+      <motion.nav 
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="border-b border-border bg-background/95 backdrop-blur sticky top-0 z-50"
+      >
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2">
+            <motion.div 
+              className="flex items-center gap-2"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
               <img src="/logo.png" alt="DevTracker" className="w-8 h-8" />
               <div className="text-primary font-bold text-xl">
                 DevTracker
               </div>
-            </div>
+            </motion.div>
             <div className="flex items-center gap-4">
               <Link
                 to="/login"
@@ -79,16 +85,18 @@ export default function Landing() {
               >
                 Sign In
               </Link>
-              <Link
-                to="/signup"
-                className="btn-leetcode"
-              >
-                Get Started
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  to="/signup"
+                  className="btn-leetcode"
+                >
+                  Get Started
+                </Link>
+              </motion.div>
             </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Hero Section */}
       <section className="py-20 lg:py-32">
@@ -120,20 +128,24 @@ export default function Landing() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
-              <Link
-                to="/signup"
-                className="btn-leetcode flex items-center gap-2 text-lg px-8 py-3"
-              >
-                <Play className="w-5 h-5" />
-                Start Tracking
-              </Link>
-              <Link
-                to="/login"
-                className="btn-leetcode-outline flex items-center gap-2 text-lg px-8 py-3"
-              >
-                View Demo
-                <ArrowRight className="w-5 h-5" />
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  to="/signup"
+                  className="btn-leetcode flex items-center gap-2 text-lg px-8 py-3"
+                >
+                  <Play className="w-5 h-5" />
+                  Start Tracking
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  to="/login"
+                  className="btn-leetcode-outline flex items-center gap-2 text-lg px-8 py-3"
+                >
+                  View Demo
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </motion.div>
             </motion.div>
 
             {/* Stats */}
@@ -174,14 +186,20 @@ export default function Landing() {
             {features.map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="leetcode-card rounded-lg p-6 hover:border-primary/20 transition-colors"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -8, transition: { duration: 0.2 } }}
+                className="leetcode-card rounded-lg p-6 cursor-pointer"
               >
-                <div className={`inline-flex p-3 rounded-lg bg-muted/50 ${feature.color} mb-4`}>
+                <motion.div 
+                  className={`inline-flex p-3 rounded-lg bg-muted/50 ${feature.color} mb-4`}
+                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  transition={{ duration: 0.6 }}
+                >
                   {feature.icon}
-                </div>
+                </motion.div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">
                   {feature.title}
                 </h3>
@@ -197,21 +215,29 @@ export default function Landing() {
       {/* CTA Section */}
       <section className="py-20 border-t border-border">
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
+          <motion.div 
+            className="text-center max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
               Ready to Level Up Your Coding?
             </h2>
             <p className="text-xl text-muted-foreground mb-8">
               Join thousands of developers who are already tracking their progress and achieving their goals.
             </p>
-            <Link
-              to="/signup"
-              className="btn-leetcode text-lg px-8 py-3 inline-flex items-center gap-2"
-            >
-              Get Started for Free
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/signup"
+                className="btn-leetcode text-lg px-8 py-3 inline-flex items-center gap-2"
+              >
+                Get Started for Free
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -225,17 +251,6 @@ export default function Landing() {
                 DevTracker
               </div>
               <span className="text-muted-foreground">© 2024</span>
-            </div>
-            <div className="flex items-center gap-6">
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Github className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
             </div>
           </div>
         </div>

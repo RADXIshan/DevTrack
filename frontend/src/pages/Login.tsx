@@ -4,6 +4,7 @@ import { useAppStore } from "../store/useAppStore";
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import { API_BASE_URL } from "../config/api";
+import { motion } from "framer-motion";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -32,26 +33,41 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <Link to="/" className="fixed top-6 left-6 flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-        <img src="/logo.png" alt="DevTracker" className="w-8 h-8" />
-        <div className="text-primary font-bold text-xl">
-          DevTracker
-        </div>
-      </Link>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Link to="/" className="fixed top-6 left-6 flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <img src="/logo.png" alt="DevTracker" className="w-8 h-8" />
+          <div className="text-primary font-bold text-xl">
+            DevTracker
+          </div>
+        </Link>
+      </motion.div>
 
-      <div className="w-full max-w-md">
-        <div className="leetcode-card rounded-lg p-8">
+      <motion.div 
+        className="w-full max-w-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+      >
+        <div className="leetcode-card rounded-lg p-8 shadow-2xl">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-foreground mb-2">Sign In</h1>
             <p className="text-muted-foreground">
-              Welcome back to LeetTracker
+              Welcome back to DevTracker
             </p>
           </div>
 
           {error && (
-            <div className="mb-6 p-3 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-md">
+            <motion.div 
+              className="mb-6 p-3 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-lg"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+            >
               {error}
-            </div>
+            </motion.div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -64,7 +80,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                 placeholder="Enter your email"
               />
             </div>
@@ -79,7 +95,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10"
+                  className="w-full px-3 py-2 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10 transition-all"
                   placeholder="Enter your password"
                 />
                 <button
@@ -92,13 +108,15 @@ export default function Login() {
               </div>
             </div>
 
-            <button
+            <motion.button
               type="submit"
               disabled={loading}
               className="w-full btn-leetcode py-3 mt-6 disabled:opacity-50"
+              whileHover={{ scale: loading ? 1 : 1.02 }}
+              whileTap={{ scale: loading ? 1 : 0.98 }}
             >
               {loading ? "Signing in..." : "Sign In"}
-            </button>
+            </motion.button>
           </form>
 
           <div className="mt-6 text-center">
@@ -110,7 +128,7 @@ export default function Login() {
             </Link>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

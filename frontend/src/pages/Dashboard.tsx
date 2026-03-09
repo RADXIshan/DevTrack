@@ -5,6 +5,7 @@ import axios from "axios";
 import ProblemTable from "../components/problems/ProblemTable";
 import ProblemModal from "../components/problems/ProblemModal";
 import { API_BASE_URL } from "../config/api";
+import { motion } from "framer-motion";
 
 export default function Dashboard() {
   const { mode, user } = useAppStore();
@@ -78,51 +79,101 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <div className="container max-w-7xl mx-auto px-4 py-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <motion.div 
+          className="flex items-center justify-between mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div>
             <h1 className="text-2xl font-bold text-foreground mb-1">{content.title}</h1>
             <p className="text-muted-foreground">{content.desc}</p>
           </div>
-          <button
+          <motion.button
             onClick={() => setIsModalOpen(true)}
             className="btn-leetcode flex items-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <Plus className="w-4 h-4" />
             Add {mode === "DSA" ? "Problem" : mode === "DEV" ? "Project" : "Research"}
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
           {/* Total Solved */}
-          <div className="leetcode-card rounded-lg p-4">
+          <motion.div 
+            className="leetcode-card rounded-lg p-4"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+          >
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-sm">Total Solved</p>
-                <p className="text-2xl font-bold text-foreground">{stats.totalSolved}</p>
+                <motion.p 
+                  className="text-2xl font-bold text-foreground"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  {stats.totalSolved}
+                </motion.p>
               </div>
-              <div className={`p-2 rounded-lg bg-primary/10 ${content.color}`}>
+              <motion.div 
+                className={`p-2 rounded-lg bg-primary/10 ${content.color}`}
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.6 }}
+              >
                 {content.icon}
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Difficulty breakdown for DSA */}
-          {mode === "DSA" && getDifficultyStats().map((stat) => (
-            <div key={stat.label} className="leetcode-card rounded-lg p-4">
+          {mode === "DSA" && getDifficultyStats().map((stat, index) => (
+            <motion.div 
+              key={stat.label} 
+              className="leetcode-card rounded-lg p-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.1 + (index + 1) * 0.1 }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-muted-foreground text-sm">{stat.label}</p>
-                  <p className={`text-2xl font-bold ${stat.color}`}>{stat.count}</p>
+                  <motion.p 
+                    className={`text-2xl font-bold ${stat.color}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 + (index + 1) * 0.1 }}
+                  >
+                    {stat.count}
+                  </motion.p>
                 </div>
-                <div className={`w-3 h-3 rounded-full ${stat.color.replace('text-', 'bg-')}`}></div>
+                <motion.div 
+                  className={`w-3 h-3 rounded-full ${stat.color.replace('text-', 'bg-')}`}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.4 + (index + 1) * 0.1, type: "spring" }}
+                />
               </div>
-            </div>
+            </motion.div>
           ))}
 
           {/* Tech Stack for DEV */}
-          {mode === "DEV" && Object.entries(stats.techStackCounts || {}).slice(0, 3).map(([tech, count]) => (
-            <div key={tech} className="leetcode-card rounded-lg p-4">
+          {mode === "DEV" && Object.entries(stats.techStackCounts || {}).slice(0, 3).map(([tech, count], index) => (
+            <motion.div 
+              key={tech} 
+              className="leetcode-card rounded-lg p-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.1 + (index + 1) * 0.1 }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-muted-foreground text-sm">{tech}</p>
@@ -130,12 +181,19 @@ export default function Dashboard() {
                 </div>
                 <Code className="w-5 h-5 text-blue-400" />
               </div>
-            </div>
+            </motion.div>
           ))}
 
           {/* Framework for AI */}
-          {mode === "AI" && Object.entries(stats.frameworkCounts || {}).slice(0, 3).map(([framework, count]) => (
-            <div key={framework} className="leetcode-card rounded-lg p-4">
+          {mode === "AI" && Object.entries(stats.frameworkCounts || {}).slice(0, 3).map(([framework, count], index) => (
+            <motion.div 
+              key={framework} 
+              className="leetcode-card rounded-lg p-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.1 + (index + 1) * 0.1 }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-muted-foreground text-sm">{framework}</p>
@@ -143,12 +201,17 @@ export default function Dashboard() {
                 </div>
                 <Brain className="w-5 h-5 text-purple-400" />
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Recent Activity */}
-        <div className="leetcode-card rounded-lg">
+        <motion.div 
+          className="leetcode-card rounded-lg"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
           <div className="p-6 border-b border-border">
             <h2 className="text-lg font-semibold text-foreground">Recent Activity</h2>
           </div>
@@ -160,7 +223,7 @@ export default function Dashboard() {
               setIsModalOpen(true);
             }}
           />
-        </div>
+        </motion.div>
 
         {/* Modal */}
         <ProblemModal
