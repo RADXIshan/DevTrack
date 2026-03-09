@@ -57,7 +57,7 @@ export default function Dashboard() {
           title: "AI/ML",
           desc: "Track machine learning models and research",
           icon: <Brain className="w-5 h-5" />,
-          color: "text-purple-400"
+          color: "text-cyan-400"
         };
     }
   };
@@ -68,7 +68,7 @@ export default function Dashboard() {
     if (mode === "DSA") {
       return [
         { label: "Easy", count: stats.difficultyCounts?.Easy || 0, color: "text-green-400" },
-        { label: "Medium", count: stats.difficultyCounts?.Medium || 0, color: "text-yellow-400" },
+        { label: "Medium", count: stats.difficultyCounts?.Medium || 0, color: "text-amber-400" },
         { label: "Hard", count: stats.difficultyCounts?.Hard || 0, color: "text-red-400" },
       ];
     }
@@ -197,9 +197,9 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-muted-foreground text-sm">{framework}</p>
-                  <p className="text-2xl font-bold text-purple-400">{count as number}</p>
+                  <p className="text-2xl font-bold text-cyan-400">{count as number}</p>
                 </div>
-                <Brain className="w-5 h-5 text-purple-400" />
+                <Brain className="w-5 h-5 text-cyan-400" />
               </div>
             </motion.div>
           ))}

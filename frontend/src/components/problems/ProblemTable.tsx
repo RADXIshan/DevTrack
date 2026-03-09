@@ -140,7 +140,7 @@ export default function ProblemTable({ problems, onRefresh, onEdit }: { problems
                 
                 {mode === "AI" && (
                   <td>
-                    <span className="inline-flex items-center px-2 py-1 rounded-md text-xs bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                    <span className="inline-flex items-center px-2 py-1 rounded-md text-xs bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                       {problem.framework || "—"}
                     </span>
                   </td>

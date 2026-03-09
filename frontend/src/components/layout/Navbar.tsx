@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAppStore } from "../../store/useAppStore";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LogOut, Code2, Cpu, GraduationCap, Menu, X, User } from "lucide-react";
@@ -24,6 +24,24 @@ const Navbar = () => {
     logout();
     navigate("/login");
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (showUserMenu && !target.closest('.user-menu-container')) {
+        setShowUserMenu(false);
+      }
+    };
+
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showUserMenu]);
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md border-b border-border shadow-lg">
@@ -73,15 +91,15 @@ const Navbar = () => {
           </div>
 
           {/* User Menu */}
-          <div className="relative">
+          <div className="relative user-menu-container">
             <motion.button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex items-center gap-2 p-2 rounded-md hover:bg-muted/50 transition-colors"
+              className="flex items-center gap-2 p-1 rounded-full hover:bg-primary/10 transition-all duration-200"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium text-primary">
+              <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center ring-2 ring-transparent hover:ring-primary/40 transition-all duration-200">
+                <span className="text-sm font-semibold text-primary">
                   {user?.name?.charAt(0).toUpperCase()}
                 </span>
               </div>
@@ -89,33 +107,42 @@ const Navbar = () => {
 
             <AnimatePresence>
               {showUserMenu && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                  transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                  className="absolute right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-2xl py-1 z-50"
-                >
-                  <div className="px-3 py-2 border-b border-border">
-                    <p className="text-sm font-medium">{user?.name}</p>
-                    <p className="text-xs text-muted-foreground">{user?.email}</p>
-                  </div>
-                  <Link
-                    to="/dashboard/profile"
+                <>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-40"
                     onClick={() => setShowUserMenu(false)}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-muted/50 transition-colors"
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                    transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                    className="absolute right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-2xl py-1 z-50"
                   >
-                    <User className="h-4 w-4" />
-                    Profile
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-muted/50 transition-colors"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Sign Out
-                  </button>
-                </motion.div>
+                    <div className="px-3 py-2 border-b border-border">
+                      <p className="text-sm font-medium">{user?.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                    </div>
+                    <Link
+                      to="/dashboard/profile"
+                      onClick={() => setShowUserMenu(false)}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-muted/50 transition-colors"
+                    >
+                      <User className="h-4 w-4" />
+                      Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-muted/50 transition-colors text-red-400"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </button>
+                  </motion.div>
+                </>
               )}
             </AnimatePresence>
           </div>

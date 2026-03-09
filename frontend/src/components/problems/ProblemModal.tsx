@@ -133,6 +133,7 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
                 className="p-2 rounded-md hover:bg-muted/50 transition-colors disabled:opacity-50"
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
+                transition={{ duration: 0.2 }}
               >
                 <X className="w-5 h-5" />
               </motion.button>

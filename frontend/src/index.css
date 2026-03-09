@@ -4,11 +4,11 @@
   --font-sans: "Inter", "Segoe UI", Roboto, sans-serif;
   --color-border: #2d2d2d;
   --color-input: #1a1a1a;
-  --color-ring: #ffa116;
+  --color-ring: #3b82f6;
   --color-background: #0a0a0a;
   --color-foreground: #eff2f5;
-  --color-primary: #ffa116;
-  --color-primary-foreground: #000000;
+  --color-primary: #3b82f6;
+  --color-primary-foreground: #ffffff;
   --color-secondary: #1a1a1a;
   --color-secondary-foreground: #eff2f5;
   --color-destructive: #ef4444;
@@ -30,8 +30,8 @@
     --popover: 0 0% 7%;
     --popover-foreground: 210 17% 95%;
  
-    --primary: 36 100% 53%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
  
     --secondary: 0 0% 10%;
     --secondary-foreground: 210 17% 95%;
@@ -47,13 +47,13 @@
 
     --border: 0 0% 18%;
     --input: 0 0% 10%;
-    --ring: 36 100% 53%;
+    --ring: 217 91% 60%;
  
     --radius: 0.5rem;
 
-    /* NeetCode-inspired colors */
+    /* NeetCode-inspired colors with blue theme */
     --neetcode-easy: 142 71% 45%;
-    --neetcode-medium: 36 100% 53%;
+    --neetcode-medium: 45 93% 58%;
     --neetcode-hard: 0 84% 60%;
     --neetcode-bg: 0 0% 4%;
     --neetcode-card: 0 0% 7%;
@@ -173,11 +173,11 @@ html {
 /* NeetCode-inspired button styles */
 .btn-leetcode {
   @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg font-medium transition-all duration-200;
-  box-shadow: 0 2px 8px rgba(255, 161, 22, 0.2);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
 }
 
 .btn-leetcode:hover {
-  box-shadow: 0 4px 12px rgba(255, 161, 22, 0.3);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
   transform: translateY(-1px);
 }
 
@@ -216,7 +216,7 @@ html {
 }
 
 .difficulty-medium {
-  @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-500/15 text-yellow-400 border border-yellow-500/30;
+  @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30;
 }
 
 .difficulty-hard {
@@ -225,7 +225,7 @@ html {
 
 /* Gradient text effect */
 .gradient-text {
-  background: linear-gradient(135deg, #ffa116 0%, #ff6b35 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -233,7 +233,7 @@ html {
 
 /* Glow effect for primary elements */
 .glow-primary {
-  box-shadow: 0 0 20px rgba(255, 161, 22, 0.3);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
 }
 
 /* Smooth transitions for all interactive elements */
@@ -245,4 +245,37 @@ button, a, input, textarea, select {
 *:focus-visible {
   outline: 2px solid hsl(var(--primary));
   outline-offset: 2px;
+}
+
+/* Profile avatar pulse animation */
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+.avatar-pulse {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Smooth backdrop blur for modals */
+.modal-backdrop {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Enhanced card hover effect */
+.card-hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
 }

@@ -29,19 +29,19 @@ export default function Landing() {
       icon: <Brain className="w-6 h-6" />,
       title: "AI/ML Research",
       description: "Document research papers, model architectures, and machine learning experiments.",
-      color: "text-purple-400"
+      color: "text-cyan-400"
     },
     {
       icon: <BarChart3 className="w-6 h-6" />,
       title: "Progress Analytics",
       description: "Visualize your learning journey with detailed statistics and progress tracking.",
-      color: "text-yellow-400"
+      color: "text-indigo-400"
     },
     {
       icon: <Target className="w-6 h-6" />,
       title: "Goal Setting",
       description: "Set targets, track streaks, and stay motivated with personalized milestones.",
-      color: "text-red-400"
+      color: "text-violet-400"
     },
     {
       icon: <Zap className="w-6 h-6" />,
@@ -54,7 +54,7 @@ export default function Landing() {
   const stats = [
     { label: "Problems Solved", value: "10K+", color: "text-green-400" },
     { label: "Active Users", value: "5K+", color: "text-blue-400" },
-    { label: "Projects Tracked", value: "2K+", color: "text-purple-400" },
+    { label: "Projects Tracked", value: "2K+", color: "text-cyan-400" },
   ];
 
   return (
