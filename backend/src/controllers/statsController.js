@@ -1,4 +1,4 @@
-import prisma from "../config/db.js";
+import pool from "../config/db.js";
 
 // @desc    Get user stats for a specific mode
 // @route   GET /api/stats
@@ -6,13 +6,12 @@ export const getStats = async (req, res) => {
   try {
     const { mode = "DSA" } = req.query;
 
-    const problems = await prisma.problemEntry.findMany({
-      where: {
-        userId: req.user.id,
-        mode,
-      },
-    });
+    const result = await pool.query(
+      "SELECT * FROM problem_entries WHERE user_id = $1 AND mode = $2",
+      [req.user.id, mode]
+    );
 
+    const problems = result.rows;
     const totalSolved = problems.length;
 
     const difficultyCounts = { Easy: 0, Medium: 0, Hard: 0 };
@@ -28,11 +27,11 @@ export const getStats = async (req, res) => {
       if (p.pattern) {
         patternCounts[p.pattern] = (patternCounts[p.pattern] || 0) + 1;
       }
-      if (p.dataStructure) {
-        dsCounts[p.dataStructure] = (dsCounts[p.dataStructure] || 0) + 1;
+      if (p.data_structure) {
+        dsCounts[p.data_structure] = (dsCounts[p.data_structure] || 0) + 1;
       }
-      if (p.techStack) {
-        techStackCounts[p.techStack] = (techStackCounts[p.techStack] || 0) + 1;
+      if (p.tech_stack) {
+        techStackCounts[p.tech_stack] = (techStackCounts[p.tech_stack] || 0) + 1;
       }
       if (p.framework) {
         frameworkCounts[p.framework] = (frameworkCounts[p.framework] || 0) + 1;
