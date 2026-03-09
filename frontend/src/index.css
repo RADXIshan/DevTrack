@@ -1,85 +1,63 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", "Outfit", "Segoe UI", Roboto, sans-serif;
-  --color-border: #e2e8f0;
-  --color-input: #e2e8f0;
-  --color-ring: #cbd5e1;
-  --color-background: #ffffff;
-  --color-foreground: #020817;
-  --color-primary: #0f172a;
-  --color-primary-foreground: #f8fafc;
-  --color-secondary: #f1f5f9;
-  --color-secondary-foreground: #0f172a;
+  --font-sans: "Inter", "Segoe UI", Roboto, sans-serif;
+  --color-border: #3a3a3a;
+  --color-input: #2a2a2a;
+  --color-ring: #ffa116;
+  --color-background: #1a1a1a;
+  --color-foreground: #ffffff;
+  --color-primary: #ffa116;
+  --color-primary-foreground: #000000;
+  --color-secondary: #262626;
+  --color-secondary-foreground: #ffffff;
   --color-destructive: #ef4444;
-  --color-destructive-foreground: #f8fafc;
-  --color-muted: #f1f5f9;
-  --color-muted-foreground: #64748b;
-  --color-accent: #f1f5f9;
-  --color-accent-foreground: #0f172a;
+  --color-destructive-foreground: #ffffff;
+  --color-muted: #2a2a2a;
+  --color-muted-foreground: #a3a3a3;
+  --color-accent: #262626;
+  --color-accent-foreground: #ffffff;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 26 26% 10%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 26 26% 12%;
+    --card-foreground: 0 0% 100%;
  
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 26 26% 12%;
+    --popover-foreground: 0 0% 100%;
  
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 36 100% 53%;
+    --primary-foreground: 0 0% 0%;
  
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
  
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 64%;
  
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
  
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 0 0% 23%;
+    --input: 0 0% 16%;
+    --ring: 36 100% 53%;
  
-    --radius: 0.5rem;
-  }
- 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
- 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
- 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
- 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
- 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
- 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
- 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
- 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --radius: 0.375rem;
+
+    /* LeetCode specific colors */
+    --leetcode-easy: 120 100% 40%;
+    --leetcode-medium: 36 100% 53%;
+    --leetcode-hard: 0 84% 60%;
+    --leetcode-bg: 26 26% 10%;
+    --leetcode-card: 26 26% 12%;
+    --leetcode-hover: 0 0% 20%;
   }
 
   * {
@@ -89,6 +67,7 @@
     @apply bg-background text-foreground tracking-tight transition-colors duration-300;
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: var(--font-sans);
+    background-color: hsl(var(--leetcode-bg));
   }
 }
 
@@ -159,4 +138,65 @@ html {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   @apply bg-zinc-400 dark:bg-zinc-600;
+}
+
+/* LeetCode-specific utility classes */
+.leetcode-easy {
+  color: hsl(var(--leetcode-easy));
+}
+
+.leetcode-medium {
+  color: hsl(var(--leetcode-medium));
+}
+
+.leetcode-hard {
+  color: hsl(var(--leetcode-hard));
+}
+
+.leetcode-card {
+  background-color: hsl(var(--leetcode-card));
+  border: 1px solid hsl(var(--border));
+}
+
+.leetcode-hover:hover {
+  background-color: hsl(var(--leetcode-hover));
+}
+
+/* LeetCode button styles */
+.btn-leetcode {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md font-medium transition-colors;
+}
+
+.btn-leetcode-outline {
+  @apply border border-border bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground px-4 py-2 rounded-md font-medium transition-colors;
+}
+
+/* LeetCode table styles */
+.leetcode-table {
+  @apply w-full border-collapse;
+}
+
+.leetcode-table th {
+  @apply bg-muted/50 text-left p-3 font-medium text-sm border-b border-border;
+}
+
+.leetcode-table td {
+  @apply p-3 border-b border-border/50 text-sm;
+}
+
+.leetcode-table tr:hover {
+  @apply bg-muted/30;
+}
+
+/* Custom difficulty badges */
+.difficulty-easy {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20;
+}
+
+.difficulty-medium {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-400 border border-yellow-500/20;
+}
+
+.difficulty-hard {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20;
 }

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useAppStore } from "../../store/useAppStore";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Code2, Cpu, GraduationCap, Menu, X } from "lucide-react";
+import { LogOut, Code2, Cpu, GraduationCap, Menu, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../lib/utils";
 
 const modes = [
-  { id: "DSA", label: "DSA", icon: GraduationCap },
-  { id: "DEV", label: "Dev", icon: Code2 },
+  { id: "DSA", label: "Problems", icon: GraduationCap },
+  { id: "DEV", label: "Projects", icon: Code2 },
   { id: "AI", label: "AI/ML", icon: Cpu },
 ];
 
@@ -16,8 +16,9 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
-  const isProfile = location.pathname === "/profile";
+  const isProfile = location.pathname === "/dashboard/profile";
 
   const handleLogout = () => {
     logout();
@@ -25,121 +26,151 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="container flex h-16 max-w-7xl mx-auto items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full bg-background border-b border-border">
+      <div className="container flex h-14 max-w-7xl mx-auto items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <Link to="/dashboard" className="flex items-center gap-2 transition-transform hover:scale-105 active:scale-95">
-            <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
-              <Code2 className="h-5 w-5" />
+        <div className="flex items-center gap-6">
+          <Link to="/dashboard" className="flex items-center gap-2 transition-opacity hover:opacity-80">
+            <img src="/logo.png" alt="DevTracker" className="w-8 h-8" />
+            <div className="text-primary font-bold text-xl">
+              DevTracker
             </div>
-            <span className="font-bold text-xl tracking-tight hidden sm:inline-block">CodeTracker</span>
           </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-1">
+            {modes.map((m) => {
+              const isActive = mode === m.id && !isProfile;
+              return (
+                <button
+                  key={m.id}
+                  onClick={() => {
+                    setMode(m.id as any);
+                    if (isProfile) navigate("/dashboard");
+                  }}
+                  className={cn(
+                    "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                    isActive 
+                      ? "text-primary bg-primary/10" 
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  )}
+                >
+                  {m.label}
+                </button>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* Desktop Mode Toggle */}
-        <div className="hidden md:flex items-center p-1 bg-secondary rounded-xl border border-border shadow-sm">
-          {modes.map((m) => {
-            const isActive = mode === m.id && !isProfile;
-            const Icon = m.icon;
-            return (
-              <button
-                key={m.id}
-                onClick={() => {
-                  setMode(m.id as any);
-                  if (isProfile) navigate("/dashboard");
-                }}
-                className={cn(
-                  "relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors z-10",
-                  isActive ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-                )}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="navbar-active-mode"
-                    className="absolute inset-0 bg-primary rounded-lg border border-primary z-[-1]"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-                <Icon className="h-4 w-4" />
-                {m.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Right Actions */}
+        {/* Right side */}
         <div className="flex items-center gap-4">
-          {user ? (
-            <div className="hidden md:flex items-center gap-4">
-              <Link to="/profile" className={cn(
-                "text-sm font-medium transition-colors",
-                isProfile ? "text-primary font-semibold" : "text-muted-foreground hover:text-foreground"
-              )}>
-                Hey, {user.name.split(" ")[0]}
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden lg:inline">Logout</span>
-              </button>
-            </div>
-          ) : (
-            <Link to="/login" className="text-sm font-medium px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90">
-              Login
-            </Link>
-          )}
+          {/* User Name */}
+          <div className="hidden md:block text-sm text-muted-foreground">
+            Hey, {user?.name?.split(' ')[0]}
+          </div>
 
-          {/* Mobile menu button */}
-          <button className="md:hidden p-2" onClick={() => setIsOpen(!isOpen)}>
+          {/* User Menu */}
+          <div className="relative">
+            <button
+              onClick={() => setShowUserMenu(!showUserMenu)}
+              className="flex items-center gap-2 p-2 rounded-md hover:bg-muted/50 transition-colors"
+            >
+              <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                <span className="text-sm font-medium text-primary">
+                  {user?.name?.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            </button>
+
+            <AnimatePresence>
+              {showUserMenu && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                  className="absolute right-0 mt-2 w-48 bg-background border border-border rounded-md shadow-lg py-1 z-50"
+                >
+                  <div className="px-3 py-2 border-b border-border">
+                    <p className="text-sm font-medium">{user?.name}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email}</p>
+                  </div>
+                  <Link
+                    to="/dashboard/profile"
+                    onClick={() => setShowUserMenu(false)}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-muted/50 transition-colors"
+                  >
+                    <User className="h-4 w-4" />
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-muted/50 transition-colors"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 rounded-md hover:bg-muted/50 transition-colors"
+          >
             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Content */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden border-t overflow-hidden bg-background"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-border bg-background"
           >
-            <div className="px-4 py-4 space-y-4">
-              <div className="flex justify-between items-center p-1 bg-secondary rounded-xl border border-border shadow-sm">
-                {modes.map((m) => {
-                  const isActive = mode === m.id && !isProfile;
-                  return (
-                    <button
-                      key={m.id}
-                      onClick={() => { 
-                        setMode(m.id as any); 
-                        setIsOpen(false); 
-                        if (isProfile) navigate("/dashboard");
-                      }}
-                      className={cn(
-                        "relative flex flex-1 justify-center items-center py-2 text-sm font-medium rounded-lg z-10",
-                        isActive ? "text-primary-foreground bg-primary" : "text-muted-foreground"
-                      )}
-                    >
-                      {m.label}
-                    </button>
-                  );
-                })}
-              </div>
-              
-              {user && (
-                <div className="flex items-center justify-between pt-4 border-t">
-                  <span className="text-sm font-medium">Logged in as {user.name}</span>
-                  <button onClick={handleLogout} className="text-sm text-destructive font-medium border border-destructive/20 bg-destructive/10 px-3 py-1.5 rounded-md">
-                    Logout
+            <div className="container max-w-7xl mx-auto px-4 py-4 space-y-2">
+              {modes.map((m) => {
+                const isActive = mode === m.id && !isProfile;
+                const Icon = m.icon;
+                return (
+                  <button
+                    key={m.id}
+                    onClick={() => {
+                      setMode(m.id as any);
+                      if (isProfile) navigate("/dashboard");
+                      setIsOpen(false);
+                    }}
+                    className={cn(
+                      "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors text-left",
+                      isActive 
+                        ? "text-primary bg-primary/10" 
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                    )}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {m.label}
                   </button>
-                </div>
-              )}
+                );
+              })}
+              <Link
+                to="/dashboard/profile"
+                onClick={() => setIsOpen(false)}
+                className={cn(
+                  "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                  isProfile 
+                    ? "text-primary bg-primary/10" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                )}
+              >
+                <User className="h-4 w-4" />
+                Profile
+              </Link>
             </div>
           </motion.div>
         )}

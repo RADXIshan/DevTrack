@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAppStore } from "../store/useAppStore";
-import { motion } from "framer-motion";
-import { Activity, Code, Database, Brain, Plus } from "lucide-react";
+import { Code, Database, Brain, Plus } from "lucide-react";
 import axios from "axios";
 import ProblemTable from "../components/problems/ProblemTable";
 import ProblemModal from "../components/problems/ProblemModal";
@@ -40,144 +39,140 @@ export default function Dashboard() {
     switch(mode) {
       case "DSA":
         return {
-          title: "Data Structures & Algorithms",
-          desc: "Track your LeetCode, NeetCode 150, and Striver's A2Z progress.",
-          icon: <Database className="w-10 h-10 text-primary" />,
-          color: "bg-blue-500/10 text-blue-500"
+          title: "Problems",
+          desc: "Track your coding problems and algorithmic challenges",
+          icon: <Database className="w-5 h-5" />,
+          color: "text-green-400"
         };
       case "DEV":
         return {
-          title: "Development Projects",
-          desc: "Track full-stack apps, libraries, and practical dev milestones.",
-          icon: <Code className="w-10 h-10 text-primary" />,
-          color: "bg-emerald-500/10 text-emerald-500"
+          title: "Projects",
+          desc: "Track development projects and technical implementations",
+          icon: <Code className="w-5 h-5" />,
+          color: "text-blue-400"
         };
       case "AI":
         return {
-          title: "AI / Machine Learning",
-          desc: "Track research papers, models, architectures, and ML concepts.",
-          icon: <Brain className="w-10 h-10 text-primary" />,
-          color: "bg-purple-500/10 text-purple-500"
+          title: "AI/ML",
+          desc: "Track machine learning models and research",
+          icon: <Brain className="w-5 h-5" />,
+          color: "text-purple-400"
         };
     }
   };
 
   const content = getModeContent();
 
+  const getDifficultyStats = () => {
+    if (mode === "DSA") {
+      return [
+        { label: "Easy", count: stats.difficultyCounts?.Easy || 0, color: "text-green-400" },
+        { label: "Medium", count: stats.difficultyCounts?.Medium || 0, color: "text-yellow-400" },
+        { label: "Hard", count: stats.difficultyCounts?.Hard || 0, color: "text-red-400" },
+      ];
+    }
+    return [];
+  };
+
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="space-y-6"
-    >
-      <div className="flex items-start justify-between bg-card border border-border rounded-3xl p-8 shadow-sm relative overflow-hidden">
-        {/* Subtle background glow */}
-        <div className={`absolute -right-20 -top-20 w-64 h-64 rounded-full blur-[100px] opacity-50 ${content.color.split(' ')[0]}`} />
-        
-        <div className="relative z-10 space-y-4">
-          <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${content.color} bg-background border border-border shadow-sm`}>
-            {content.icon}
-          </div>
+    <div className="min-h-screen bg-background">
+      <div className="container max-w-7xl mx-auto px-4 py-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">{content.title}</h1>
-            <p className="text-muted-foreground mt-2 max-w-xl text-lg">
-              {content.desc}
-            </p>
+            <h1 className="text-2xl font-bold text-foreground mb-1">{content.title}</h1>
+            <p className="text-muted-foreground">{content.desc}</p>
           </div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="btn-leetcode flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            Add {mode === "DSA" ? "Problem" : mode === "DEV" ? "Project" : "Research"}
+          </button>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-          <div className="flex items-center gap-3 text-muted-foreground mb-2">
-            <Activity className="w-5 h-5" />
-            <h3 className="font-medium">
-              {mode === "DSA" ? "Total Solved" : mode === "DEV" ? "Total Projects" : "Total Logged"}
-            </h3>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+          {/* Total Solved */}
+          <div className="leetcode-card rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-muted-foreground text-sm">Total Solved</p>
+                <p className="text-2xl font-bold text-foreground">{stats.totalSolved}</p>
+              </div>
+              <div className={`p-2 rounded-lg bg-primary/10 ${content.color}`}>
+                {content.icon}
+              </div>
+            </div>
           </div>
-          <p className="text-4xl font-bold">{stats.totalSolved}</p>
+
+          {/* Difficulty breakdown for DSA */}
+          {mode === "DSA" && getDifficultyStats().map((stat) => (
+            <div key={stat.label} className="leetcode-card rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-muted-foreground text-sm">{stat.label}</p>
+                  <p className={`text-2xl font-bold ${stat.color}`}>{stat.count}</p>
+                </div>
+                <div className={`w-3 h-3 rounded-full ${stat.color.replace('text-', 'bg-')}`}></div>
+              </div>
+            </div>
+          ))}
+
+          {/* Tech Stack for DEV */}
+          {mode === "DEV" && Object.entries(stats.techStackCounts || {}).slice(0, 3).map(([tech, count]) => (
+            <div key={tech} className="leetcode-card rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-muted-foreground text-sm">{tech}</p>
+                  <p className="text-2xl font-bold text-blue-400">{count as number}</p>
+                </div>
+                <Code className="w-5 h-5 text-blue-400" />
+              </div>
+            </div>
+          ))}
+
+          {/* Framework for AI */}
+          {mode === "AI" && Object.entries(stats.frameworkCounts || {}).slice(0, 3).map(([framework, count]) => (
+            <div key={framework} className="leetcode-card rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-muted-foreground text-sm">{framework}</p>
+                  <p className="text-2xl font-bold text-purple-400">{count as number}</p>
+                </div>
+                <Brain className="w-5 h-5 text-purple-400" />
+              </div>
+            </div>
+          ))}
         </div>
-        
-        {mode === "DSA" && (
-          <>
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center gap-3 text-emerald-500 mb-2">
-                <Activity className="w-5 h-5" />
-                <h3 className="font-medium text-muted-foreground">Easy</h3>
-              </div>
-              <p className="text-4xl font-bold">{stats.difficultyCounts.Easy || 0}</p>
-            </div>
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center gap-3 text-amber-500 mb-2">
-                <Activity className="w-5 h-5" />
-                <h3 className="font-medium text-muted-foreground">Medium</h3>
-              </div>
-              <p className="text-4xl font-bold">{stats.difficultyCounts.Medium || 0}</p>
-            </div>
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center gap-3 text-red-500 mb-2">
-                <Activity className="w-5 h-5" />
-                <h3 className="font-medium text-muted-foreground">Hard</h3>
-              </div>
-              <p className="text-4xl font-bold">{stats.difficultyCounts.Hard || 0}</p>
-            </div>
-          </>
-        )}
 
-        {mode === "DEV" && stats.techStackCounts && Object.keys(stats.techStackCounts).slice(0, 3).map((stack, i) => (
-          <div key={stack} className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-            <div className={`flex items-center gap-3 mb-2 ${i === 0 ? 'text-blue-500' : i === 1 ? 'text-purple-500' : 'text-emerald-500'}`}>
-              <Code className="w-5 h-5" />
-              <h3 className="font-medium text-muted-foreground">{stack}</h3>
-            </div>
-            <p className="text-4xl font-bold">{stats.techStackCounts[stack]}</p>
+        {/* Recent Activity */}
+        <div className="leetcode-card rounded-lg">
+          <div className="p-6 border-b border-border">
+            <h2 className="text-lg font-semibold text-foreground">Recent Activity</h2>
           </div>
-        ))}
+          <ProblemTable 
+            problems={problems} 
+            onRefresh={fetchData}
+            onEdit={(problem) => {
+              setEditingProblem(problem);
+              setIsModalOpen(true);
+            }}
+          />
+        </div>
 
-        {mode === "AI" && stats.frameworkCounts && Object.keys(stats.frameworkCounts).slice(0, 3).map((framework, i) => (
-          <div key={framework} className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-            <div className={`flex items-center gap-3 mb-2 ${i === 0 ? 'text-orange-500' : i === 1 ? 'text-indigo-500' : 'text-rose-500'}`}>
-              <Brain className="w-5 h-5" />
-              <h3 className="font-medium text-muted-foreground">{framework}</h3>
-            </div>
-            <p className="text-4xl font-bold">{stats.frameworkCounts[framework]}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex justify-between items-center mt-8">
-        <h2 className="text-2xl font-bold tracking-tight">Recent Logs</h2>
-        <button 
-          onClick={() => {
+        {/* Modal */}
+        <ProblemModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
             setEditingProblem(null);
-            setIsModalOpen(true);
           }}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity shadow-sm"
-        >
-          <Plus className="w-4 h-4" />
-          Log Problem
-        </button>
+          onAdd={fetchData}
+          initialData={editingProblem}
+        />
       </div>
-
-      <ProblemTable 
-        problems={problems} 
-        onRefresh={fetchData} 
-        onEdit={(problem) => {
-          setEditingProblem(problem);
-          setIsModalOpen(true);
-        }}
-      />
-      <ProblemModal 
-        isOpen={isModalOpen} 
-        onClose={() => {
-          setIsModalOpen(false);
-          setEditingProblem(null);
-        }} 
-        onAdd={fetchData} 
-        initialData={editingProblem}
-      />
-
-    </motion.div>
+    </div>
   );
 }
