@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "../../store/useAppStore";
 import axios from "axios";
 import { API_BASE_URL } from "../../config/api";
+import Toast from "../layout/Toast";
+import { useToast } from "../../lib/useToast";
 
 interface ProblemModalProps {
   isOpen: boolean;
@@ -14,6 +16,7 @@ interface ProblemModalProps {
 
 export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: ProblemModalProps) {
   const { mode, user } = useAppStore();
+  const { toasts, dismiss, toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -81,18 +84,20 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
           { ...formData, mode },
           { headers: { Authorization: `Bearer ${user?.token}` } }
         );
+        toast("success", "Problem updated successfully!");
       } else {
         await axios.post(
           `${API_BASE_URL}/api/problems`,
           { ...formData, mode },
           { headers: { Authorization: `Bearer ${user?.token}` } }
         );
+        toast("success", "Problem added successfully!");
       }
       onAdd();
       onClose();
     } catch (err) {
       console.error(err);
-      alert("Failed to save problem.");
+      toast("error", "Failed to save problem. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -109,6 +114,8 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
   };
 
   return (
+    <>
+    <Toast toasts={toasts} onDismiss={dismiss} />
     <AnimatePresence>
       {isOpen && (
         <motion.div 
@@ -359,5 +366,6 @@ export default function ProblemModal({ isOpen, onClose, onAdd, initialData }: Pr
         </motion.div>
       )}
     </AnimatePresence>
+    </>
   );
 }

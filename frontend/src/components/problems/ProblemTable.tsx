@@ -5,10 +5,13 @@ import { useAppStore } from "../../store/useAppStore";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_BASE_URL } from "../../config/api";
+import Toast from "../layout/Toast";
+import { useToast } from "../../lib/useToast";
 
 export default function ProblemTable({ problems, onRefresh, onEdit }: { problems: any[], onRefresh: () => void, onEdit?: (problem: any) => void }) {
   const { user, mode } = useAppStore();
   const [problemToDelete, setProblemToDelete] = useState<string | null>(null);
+  const { toasts, dismiss, toast } = useToast();
 
   const handleDeleteConfirm = async () => {
     if (!problemToDelete) return;
@@ -18,9 +21,10 @@ export default function ProblemTable({ problems, onRefresh, onEdit }: { problems
       });
       setProblemToDelete(null);
       onRefresh();
+      toast("success", "Problem deleted.");
     } catch (err) {
       console.error(err);
-      alert("Failed to delete.");
+      toast("error", "Failed to delete. Please try again.");
     }
   };
 
@@ -57,6 +61,7 @@ export default function ProblemTable({ problems, onRefresh, onEdit }: { problems
 
   return (
     <>
+      <Toast toasts={toasts} onDismiss={dismiss} />
       <div className="overflow-x-auto">
         <table className="leetcode-table">
           <thead>

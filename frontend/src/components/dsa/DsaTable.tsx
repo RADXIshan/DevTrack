@@ -5,6 +5,8 @@ import { useAppStore } from "../../store/useAppStore";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_BASE_URL } from "../../config/api";
+import Toast from "../layout/Toast";
+import { useToast } from "../../lib/useToast";
 
 interface Props { entries: any[]; onRefresh: () => void; onEdit?: (entry: any) => void; }
 
@@ -17,13 +19,15 @@ const getDifficultyBadge = (d: string) => {
 export default function DsaTable({ entries, onRefresh, onEdit }: Props) {
   const { user } = useAppStore();
   const [toDelete, setToDelete] = useState<string | null>(null);
+  const { toasts, dismiss, toast } = useToast();
 
   const handleDelete = async () => {
     if (!toDelete) return;
     try {
       await axios.delete(`${API_BASE_URL}/api/dsa/${toDelete}`, { headers: { Authorization: `Bearer ${user?.token}` } });
       setToDelete(null); onRefresh();
-    } catch { alert("Failed to delete."); }
+      toast("success", "DSA problem deleted.");
+    } catch { toast("error", "Failed to delete. Please try again."); }
   };
 
   if (!entries.length) return (
@@ -36,6 +40,7 @@ export default function DsaTable({ entries, onRefresh, onEdit }: Props) {
 
   return (
     <>
+      <Toast toasts={toasts} onDismiss={dismiss} />
       <div className="overflow-x-auto">
         <table className="leetcode-table">
           <thead>

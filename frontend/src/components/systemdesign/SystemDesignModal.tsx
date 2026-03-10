@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "../../store/useAppStore";
 import axios from "axios";
 import { API_BASE_URL } from "../../config/api";
+import Toast from "../layout/Toast";
+import { useToast } from "../../lib/useToast";
 
 interface Props {
   isOpen: boolean;
@@ -17,6 +19,7 @@ const labelClass = "block text-sm font-medium text-foreground mb-2";
 
 export default function SystemDesignModal({ isOpen, onClose, onAdd, initialData }: Props) {
   const { user } = useAppStore();
+  const { toasts, dismiss, toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "", designType: "HLD", components: "", patterns: "",
@@ -51,15 +54,19 @@ export default function SystemDesignModal({ isOpen, onClose, onAdd, initialData 
     try {
       if (initialData) {
         await axios.put(`${API_BASE_URL}/api/systemdesign/${initialData.id}`, formData, { headers: { Authorization: `Bearer ${user?.token}` } });
+        toast("success", "System design entry updated successfully!");
       } else {
         await axios.post(`${API_BASE_URL}/api/systemdesign`, formData, { headers: { Authorization: `Bearer ${user?.token}` } });
+        toast("success", "System design entry added successfully!");
       }
       onAdd(); onClose();
-    } catch (err) { console.error(err); alert("Failed to save entry."); }
+    } catch (err) { console.error(err); toast("error", "Failed to save entry. Please try again."); }
     finally { setLoading(false); }
   };
 
   return (
+    <>
+    <Toast toasts={toasts} onDismiss={dismiss} />
     <AnimatePresence>
       {isOpen && (
         <motion.div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -122,5 +129,6 @@ export default function SystemDesignModal({ isOpen, onClose, onAdd, initialData 
         </motion.div>
       )}
     </AnimatePresence>
+    </>
   );
 }

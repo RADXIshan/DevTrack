@@ -6,9 +6,12 @@ import {
 import axios from 'axios';
 import { API_BASE_URL } from '../config/api';
 import { motion } from 'framer-motion';
+import Toast from '../components/layout/Toast';
+import { useToast } from '../lib/useToast';
 
 const Profile = () => {
   const { user, setUser } = useAppStore();
+  const { toasts, dismiss, toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     bio: user?.bio || '',
@@ -37,8 +40,10 @@ const Profile = () => {
       });
       setUser({ ...user!, ...res.data });
       setIsEditing(false);
+      toast("success", "Profile updated successfully!");
     } catch (error) {
       console.error(error);
+      toast("error", "Failed to update profile. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -68,6 +73,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Toast toasts={toasts} onDismiss={dismiss} />
       <div className="container max-w-6xl mx-auto px-4 py-6">
         {/* Header */}
         <motion.div 
