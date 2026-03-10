@@ -31,7 +31,7 @@ const modeConfig: Record<string, { title: string; desc: string; icon: React.Reac
   DSA: { title: "Problems", desc: "Track your coding problems and algorithmic challenges", icon: <GraduationCap className="w-5 h-5" />, color: "text-green-400", addLabel: "Add Problem" },
   DEV: { title: "Projects", desc: "Track development projects and implementations", icon: <Code className="w-5 h-5" />, color: "text-blue-400", addLabel: "Add Project" },
   AI: { title: "AI / ML", desc: "Track machine learning research, algorithms and papers", icon: <Brain className="w-5 h-5" />, color: "text-cyan-400", addLabel: "Add Research" },
-  DB: { title: "Databases", desc: "Track SQL, NoSQL and database concepts you've learned", icon: <Database className="w-5 h-5" />, color: "text-amber-400", addLabel: "Add Topic" },
+  DB: { title: "Databases", desc: "Track SQL, NoSQL, Vector and database concepts you've learned", icon: <Database className="w-5 h-5" />, color: "text-amber-400", addLabel: "Add Topic" },
   SYSTEMDESIGN: { title: "System Design", desc: "Track HLD, LLD and architectural patterns", icon: <Layers className="w-5 h-5" />, color: "text-orange-400", addLabel: "Add Design" },
 };
 
@@ -97,7 +97,7 @@ export default function Dashboard() {
       return [
         { label: "SQL", count: dc.SQL || 0, color: "text-blue-400" },
         { label: "NoSQL", count: dc.NoSQL || 0, color: "text-green-400" },
-        { label: "NewSQL", count: dc.NewSQL || 0, color: "text-purple-400" },
+        { label: "VectorDB", count: dc.VectorDB || 0, color: "text-purple-400" },
       ].map((s, i) => (
         <motion.div key={s.label} className="leetcode-card rounded-lg p-4" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 + (i + 1) * 0.1 }} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
           <p className="text-muted-foreground text-sm">{s.label}</p>

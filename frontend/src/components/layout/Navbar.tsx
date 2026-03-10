@@ -6,11 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../lib/utils";
 
 const modes = [
-  { id: "DSA", label: "Problems", icon: GraduationCap },
-  { id: "DEV", label: "Projects", icon: Code2 },
+  { id: "DSA", label: "DSA", icon: GraduationCap },
+  { id: "DEV", label: "Development", icon: Code2 },
   { id: "AI", label: "AI/ML", icon: Cpu },
   { id: "DB", label: "Databases", icon: Database },
-  { id: "SYSTEMDESIGN", label: "Sys Design", icon: Layers },
+  { id: "SYSTEMDESIGN", label: "System Design", icon: Layers },
 ];
 
 const Navbar = () => {

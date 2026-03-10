@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS aiml_entries (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Databases: SQL, NoSQL, NewSQL concepts and practice
+-- Databases: SQL, NoSQL, Vector Database concepts and practice
 CREATE TABLE IF NOT EXISTS db_entries (
   id UUID PRIMARY KEY,
   title VARCHAR(500) NOT NULL,

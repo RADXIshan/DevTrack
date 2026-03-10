@@ -60,7 +60,7 @@ export default function DbModal({ isOpen, onClose, onAdd, initialData }: Props) 
   const dbTechOptions: Record<string, string[]> = {
     SQL: ["PostgreSQL", "MySQL", "SQLite", "MariaDB", "Oracle", "Microsoft SQL Server", "CockroachDB"],
     NoSQL: ["MongoDB", "Redis", "Cassandra", "DynamoDB", "Couchbase", "Neo4j", "Firestore", "Elasticsearch"],
-    NewSQL: ["CockroachDB", "Google Spanner", "YugabyteDB", "TiDB", "VoltDB"],
+    VectorDB: ["Pinecone", "Weaviate", "Qdrant", "Milvus", "Chroma", "PGVector", "Redis Vector", "MongoDB Atlas Vector", "Faiss", "LanceDB", "Zilliz", "OpenSearch"],
   };
 
   return (
@@ -85,7 +85,7 @@ export default function DbModal({ isOpen, onClose, onAdd, initialData }: Props) 
                   <select value={formData.dbType} onChange={e => { set("dbType", e.target.value); set("dbTechnology", ""); }} className={inputClass}>
                     <option value="SQL">SQL (Relational)</option>
                     <option value="NoSQL">NoSQL</option>
-                    <option value="NewSQL">NewSQL</option>
+                    <option value="VectorDB">Vector Databases</option>
                   </select>
                 </div>
                 <div>

@@ -60,7 +60,7 @@ export const getStats = async (req, res) => {
           [userId]
         );
         totalSolved = result.rows.length;
-        const dbTypeCounts = { SQL: 0, NoSQL: 0, NewSQL: 0 };
+        const dbTypeCounts = { SQL: 0, NoSQL: 0, VectorDB: 0 };
         const dbTechCounts = {};
         result.rows.forEach((p) => {
           if (p.db_type) dbTypeCounts[p.db_type] = (dbTypeCounts[p.db_type] || 0) + 1;
