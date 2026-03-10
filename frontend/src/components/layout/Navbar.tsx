@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAppStore } from "../../store/useAppStore";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Code2, Cpu, GraduationCap, Menu, X, User } from "lucide-react";
+import { LogOut, Code2, Cpu, GraduationCap, Menu, X, User, Database, Layers } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../lib/utils";
 
@@ -9,6 +9,8 @@ const modes = [
   { id: "DSA", label: "Problems", icon: GraduationCap },
   { id: "DEV", label: "Projects", icon: Code2 },
   { id: "AI", label: "AI/ML", icon: Cpu },
+  { id: "DB", label: "Databases", icon: Database },
+  { id: "SYSTEMDESIGN", label: "Sys Design", icon: Layers },
 ];
 
 const Navbar = () => {
@@ -25,7 +27,6 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -33,11 +34,9 @@ const Navbar = () => {
         setShowUserMenu(false);
       }
     };
-
     if (showUserMenu) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -48,7 +47,7 @@ const Navbar = () => {
       <div className="container flex h-14 max-w-7xl mx-auto items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Logo */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link to="/dashboard" className="flex items-center gap-2 transition-opacity hover:opacity-80">
               <img src="/logo.png" alt="DevTracker" className="w-8 h-8" />
@@ -59,7 +58,7 @@ const Navbar = () => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {modes.map((m) => {
               const isActive = mode === m.id && !isProfile;
               return (
@@ -70,7 +69,7 @@ const Navbar = () => {
                     if (isProfile) navigate("/dashboard");
                   }}
                   className={cn(
-                    "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                    "px-3 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap",
                     isActive 
                       ? "text-primary bg-primary/10" 
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -150,7 +149,7 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-md hover:bg-muted/50 transition-colors"
+            className="lg:hidden p-2 rounded-md hover:bg-muted/50 transition-colors"
           >
             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -164,7 +163,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border bg-background"
+            className="lg:hidden border-t border-border bg-background"
           >
             <div className="container max-w-7xl mx-auto px-4 py-4 space-y-2">
               {modes.map((m) => {

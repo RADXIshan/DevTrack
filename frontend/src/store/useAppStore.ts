@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type Mode = "DSA" | "DEV" | "AI";
+export type Mode = "DSA" | "DEV" | "AI" | "DB" | "SYSTEMDESIGN";
 
 interface User {
   id: string;

@@ -77,12 +77,8 @@ export const loginUser = async (req, res) => {
 export const getMe = async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT u.id, u.name, u.email, u.bio, u.github_url, u.linkedin_url, u.twitter_url, u.created_at,
-       COUNT(p.id) as problem_count
-       FROM users u
-       LEFT JOIN problem_entries p ON u.id = p.user_id
-       WHERE u.id = $1
-       GROUP BY u.id`,
+      `SELECT id, name, email, bio, github_url, linkedin_url, twitter_url, created_at
+       FROM users WHERE id = $1`,
       [req.user.id]
     );
 
@@ -101,9 +97,6 @@ export const getMe = async (req, res) => {
       linkedinUrl: user.linkedin_url,
       twitterUrl: user.twitter_url,
       createdAt: user.created_at,
-      _count: {
-        problems: parseInt(user.problem_count)
-      }
     });
   } catch (error) {
     console.error(error);

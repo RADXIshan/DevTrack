@@ -2,7 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
-import problemRoutes from "./routes/problemRoutes.js";
+import dsaRoutes from "./routes/dsaRoutes.js";
+import devRoutes from "./routes/devRoutes.js";
+import aimlRoutes from "./routes/aimlRoutes.js";
+import dbRoutes from "./routes/dbRoutes.js";
+import systemDesignRoutes from "./routes/systemDesignRoutes.js";
 import sheetRoutes from "./routes/sheetRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -29,7 +33,11 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/problems", problemRoutes);
+app.use("/api/dsa", dsaRoutes);
+app.use("/api/dev", devRoutes);
+app.use("/api/aiml", aimlRoutes);
+app.use("/api/db", dbRoutes);
+app.use("/api/systemdesign", systemDesignRoutes);
 app.use("/api/sheets", sheetRoutes);
 app.use("/api/stats", statsRoutes);
 app.use("/api/users", userRoutes);
