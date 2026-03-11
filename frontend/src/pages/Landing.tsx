@@ -250,7 +250,7 @@ export default function Landing() {
               <div className="text-primary font-bold text-xl">
                 DevTracker
               </div>
-              <span className="text-muted-foreground">© 2024</span>
+              <span className="text-muted-foreground">© {new Date().getFullYear()}</span>
             </div>
           </div>
         </div>
